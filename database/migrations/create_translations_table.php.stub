@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateTranslationsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('translations', function (Blueprint $table) {
+            $table->id();
+            $table->string('translatable_type');
+            $table->unsignedBigInteger('translatable_id');
+            $table->string('key')->nullable();
+            $table->json('languages')->nullable();
+            $table->timestamps();
+
+            $table->unique(['translatable_type', 'translatable_id', 'key'], 'unique_translatable');
+            $table->index(['translatable_type', 'translatable_id'], 'translatable_index');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('translations');
+    }
+}
